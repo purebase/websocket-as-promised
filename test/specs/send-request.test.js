@@ -94,5 +94,20 @@ describe('sendRequest', function () {
     });
   });
 
+  it('PB -- Sende eigenes Datenformat.', function () {
+    let sentData;
+    this.wsp.onSend.addListener(data => sentData = data);
+    let response;
+    this.wsp.onResponse.addListener((data, requestId) => response = {data, requestId});
+    const p = this.wsp.open()
+      .then(() => this.wsp.sendRequest({message: 'photo|search|{"query":"2018-07"}'}, {requestId: 1}))
+      .then(() => wait(100));
+    return assert.isFulfilled(p)
+      .then(() => assert
+        .equal(sentData, '{"requestId":1,"message":"photo|search|{\\"query\\":\\"2018-07\\"}"}' ))
+      .then(() => assert
+        .deepEqual(response, {data: {message: "photo|search|{\"query\":\"2018-07\"}", requestId: 1}, requestId: 1}));
+  });
+
 });
 
