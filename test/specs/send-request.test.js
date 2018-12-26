@@ -100,13 +100,13 @@ describe('sendRequest', function () {
     let response;
     this.wsp.onResponse.addListener((data, requestId) => response = {data, requestId});
     const p = this.wsp.open()
-      .then(() => this.wsp.sendRequest({message: 'photo|search|{"query":"2018-07"}'}, {requestId: 1}))
+      .then(() => this.wsp.sendRequest({content: 'photo|search|{"query":"2018-07"}'}, {requestId: 1}))
       .then(() => wait(100));
     return assert.isFulfilled(p)
       .then(() => assert
-        .equal(sentData, '{"requestId":1,"message":"photo|search|{\\"query\\":\\"2018-07\\"}"}' ))
+        .equal(sentData, '{"requestId":1,"content":"photo|search|{\\"query\\":\\"2018-07\\"}"}' ))
       .then(() => assert
-        .deepEqual(response, {data: {message: "photo|search|{\"query\":\"2018-07\"}", requestId: 1}, requestId: 1}));
+        .deepEqual(response, {data: {content: "photo|search|{\"query\":\"2018-07\"}", requestId: 1}, requestId: 1}));
   });
 
 });
